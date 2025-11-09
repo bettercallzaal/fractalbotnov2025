@@ -193,7 +193,7 @@ export default function Dashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{session.user?.totalFractals || 0}</div>
+              <div className="text-2xl font-bold">{session.user?.totalFractals ?? 0}</div>
             </CardContent>
           </Card>
           
@@ -203,7 +203,7 @@ export default function Dashboard() {
               <Trophy className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{session.user?.totalWins || 0}</div>
+              <div className="text-2xl font-bold">{session.user?.totalWins ?? 0}</div>
             </CardContent>
           </Card>
           
@@ -214,8 +214,8 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {session.user?.totalFractals > 0 
-                  ? Math.round((session.user?.totalWins / session.user?.totalFractals) * 100)
+                {(session.user?.totalFractals ?? 0) > 0 
+                  ? Math.round(((session.user?.totalWins ?? 0) / (session.user?.totalFractals ?? 0)) * 100)
                   : 0}%
               </div>
             </CardContent>
