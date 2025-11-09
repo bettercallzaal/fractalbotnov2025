@@ -76,8 +76,8 @@ export default NextAuth({
           session.user.id = userData[0].id.toString();
           session.user.discordId = userData[0].discordId;
           session.user.walletAddress = userData[0].walletAddress;
-          session.user.totalFractals = userData[0].totalFractals;
-          session.user.totalWins = userData[0].totalWins;
+          session.user.totalFractals = userData[0].totalFractals ?? 0;
+          session.user.totalWins = userData[0].totalWins ?? 0;
         }
       }
       return session;
