@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '../../utils/database';
 import { fractals, votingRounds, votes, users } from '../../utils/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 // Webhook endpoint for Discord bot to send updates
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -81,8 +81,10 @@ async function handleVoteCast(threadId: string, data: any) {
   let round = await db
     .select()
     .from(votingRounds)
-    .where(eq(votingRounds.fractalId, fractal[0].id))
-    .where(eq(votingRounds.level, level))
+    .where(and(
+      eq(votingRounds.fractalId, fractal[0].id),
+      eq(votingRounds.level, level)
+    ))
     .limit(1);
 
   if (round.length === 0) {
@@ -132,8 +134,10 @@ async function handleRoundComplete(threadId: string, data: any) {
         totalVotes: totalVotes,
         completedAt: new Date(),
       })
-      .where(eq(votingRounds.fractalId, fractal[0].id))
-      .where(eq(votingRounds.level, level));
+      .where(and(
+        eq(votingRounds.fractalId, fractal[0].id),
+        eq(votingRounds.level, level)
+      ));
 
     // Update fractal current level
     await db
