@@ -16,8 +16,20 @@ console.log('🔍 NextAuth Configuration:', {
   hasDiscordClientSecret: !!process.env.DISCORD_CLIENT_SECRET,
   hasNextAuthUrl: !!process.env.NEXTAUTH_URL,
   hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
+  nodeEnv: process.env.NODE_ENV,
   timestamp: new Date().toISOString()
 });
+
+// Validate required environment variables
+if (!process.env.DISCORD_CLIENT_ID) {
+  console.error('❌ DISCORD_CLIENT_ID is not set');
+}
+if (!process.env.DISCORD_CLIENT_SECRET) {
+  console.error('❌ DISCORD_CLIENT_SECRET is not set');
+}
+if (!process.env.NEXTAUTH_SECRET) {
+  console.error('❌ NEXTAUTH_SECRET is not set');
+}
 
 export default NextAuth({
   providers: [
