@@ -72,7 +72,7 @@ export default NextAuth({
           .where(eq(users.discordId, token.sub as string))
           .limit(1);
 
-        if (userData.length > 0) {
+        if (userData.length > 0 && session.user) {
           session.user.id = userData[0].id.toString();
           session.user.discordId = userData[0].discordId;
           session.user.walletAddress = userData[0].walletAddress;
