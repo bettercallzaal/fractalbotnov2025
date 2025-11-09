@@ -1,12 +1,19 @@
 {
-  "buildCommand": "cd web && npm run build",
-  "outputDirectory": "web/.next",
-  "installCommand": "cd web && npm install",
-  "framework": "nextjs",
-  "rewrites": [
+  "version": 2,
+  "name": "fractal-bot-web",
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/web/$1"
+      "src": "web/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "distDir": ".next"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/web/$1"
     }
   ]
 }
