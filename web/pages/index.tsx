@@ -39,6 +39,15 @@ export default function Dashboard() {
   const [fractals, setFractals] = useState<Fractal[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Debug logging
+  console.log('🔍 Dashboard Debug:', {
+    status,
+    session,
+    hasUser: !!session?.user,
+    userId: session?.user?.id,
+    timestamp: new Date().toISOString()
+  });
+
   useEffect(() => {
     if (session) {
       fetchFractals();
@@ -46,14 +55,26 @@ export default function Dashboard() {
   }, [session]);
 
   const fetchFractals = async () => {
+    console.log('🔄 Fetching fractals...');
     try {
       const response = await fetch('/api/fractals');
+      console.log('📡 Fractals API Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        url: response.url
+      });
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('📊 Fractals Data:', data);
         setFractals(data);
+      } else {
+        const errorText = await response.text();
+        console.error('❌ Fractals API Error:', errorText);
       }
     } catch (error) {
-      console.error('Error fetching fractals:', error);
+      console.error('💥 Fetch Error:', error);
     } finally {
       setLoading(false);
     }

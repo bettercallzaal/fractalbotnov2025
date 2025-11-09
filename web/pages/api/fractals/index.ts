@@ -37,14 +37,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .leftJoin(users, eq(fractals.facilitatorId, users.id))
         .orderBy(desc(fractals.createdAt))
         .limit(50);
-
+      console.log('✅ Fractals fetched:', {
+        count: allFractals.length,
+        fractals: allFractals.slice(0, 2) // Log first 2 for debugging
+      });
       res.status(200).json(allFractals);
     } catch (error) {
-      console.error('Error fetching fractals:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('💥 Database error:', error);
+      res.status(500).json({ error: 'Internal server error', details: (error as Error).message });
     }
   } else if (req.method === 'POST') {
     try {
+      console.log('📝 Creating new fractal...');
       const { threadId, name, guildId, facilitatorDiscordId, participantDiscordIds } = req.body;
 
       // Find facilitator in database

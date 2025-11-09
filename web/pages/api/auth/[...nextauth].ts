@@ -11,6 +11,14 @@ interface DiscordProfile {
   avatar?: string;
 }
 
+console.log('🔍 NextAuth Configuration:', {
+  hasDiscordClientId: !!process.env.DISCORD_CLIENT_ID,
+  hasDiscordClientSecret: !!process.env.DISCORD_CLIENT_SECRET,
+  hasNextAuthUrl: !!process.env.NEXTAUTH_URL,
+  hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
+  timestamp: new Date().toISOString()
+});
+
 export default NextAuth({
   providers: [
     DiscordProvider({
