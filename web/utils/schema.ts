@@ -4,7 +4,7 @@ import { relations } from 'drizzle-orm';
 // Users table - Discord users with wallet integration
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  discordId: bigint('discord_id', { mode: 'string' }).notNull().unique(),
+  discordId: varchar('discord_id', { length: 255 }).notNull().unique(),
   username: varchar('username', { length: 255 }).notNull(),
   displayName: varchar('display_name', { length: 255 }),
   avatarUrl: varchar('avatar_url', { length: 500 }),
@@ -20,9 +20,9 @@ export const users = pgTable('users', {
 // Fractals table - Individual fractal sessions
 export const fractals = pgTable('fractals', {
   id: serial('id').primaryKey(),
-  threadId: bigint('thread_id', { mode: 'string' }).unique(),
+  threadId: varchar('thread_id', { length: 255 }).unique(),
   name: varchar('name', { length: 255 }).notNull(),
-  guildId: bigint('guild_id', { mode: 'string' }).notNull(),
+  guildId: varchar('guild_id', { length: 255 }).notNull(),
   facilitatorId: integer('facilitator_id').references(() => users.id),
   status: varchar('status', { length: 50 }).default('active'), // 'active', 'completed', 'cancelled'
   participantCount: integer('participant_count').default(0),
