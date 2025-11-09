@@ -3,6 +3,7 @@ import logging
 import asyncio
 import random
 from typing import Optional, List, Dict
+from ...utils.web_integration import web_integration
 
 class FractalGroup:
     """Core class for managing a fractal voting group"""
@@ -35,6 +36,9 @@ class FractalGroup:
             f"We'll vote through levels 6→1 until we have a winner!\n\n"
         )
         await self.thread.send(welcome_msg)
+        
+        # Notify web app that fractal started
+        await web_integration.notify_fractal_started(self)
         
         # Start first round
         self.logger.info(f"Starting first round for '{self.thread.name}'")
@@ -115,6 +119,9 @@ class FractalGroup:
         # Update vote
         self.votes[voter.id] = candidate.id
         
+        # Notify web app of vote
+        await web_integration.notify_vote_cast(self, voter, candidate)
+        
         # Announce vote publicly with green checkmarks like the second image
         if previous_candidate:
             await self.thread.send(
@@ -161,6 +168,10 @@ class FractalGroup:
             if winner:
                 # Log winner info
                 self.logger.info(f"Winner for level {self.current_level}: {winner.display_name} with {max_votes}/{len(self.members)} votes")
+                
+                # Notify web app of round completion
+                await web_integration.notify_round_complete(self, winner)
+                
                 await self.start_new_round(winner)
                 return
 
@@ -182,6 +193,9 @@ class FractalGroup:
             results_text += f"{medal} {winner.mention}\n"
         
         await self.thread.send(results_text)
+        
+        # Notify web app that fractal is complete
+        await web_integration.notify_fractal_complete(self)
         
         # Post simple results to general channel
         try:
